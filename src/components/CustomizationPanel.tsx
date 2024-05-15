@@ -1,28 +1,34 @@
+import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/rootReducer';
-import { setPrimaryColor, setFontFamily, setLayout, setImage } from '../redux/themeSlice';
+import { setPrimaryColor, setSecondaryColor, setFontFamily, setFontSize, setLayout, setImage } from '../redux/themeSlice';
 
 const CustomizationPanel: React.FC = () => {
   const dispatch = useDispatch();
-  const { primaryColor, fontFamily, layout, image } = useSelector((state: RootState) => state.theme);
+  const { primaryColor, secondaryColor, fontFamily, fontSize, layout, image } = useSelector((state: RootState) => state.theme);
 
-  // Handle color change
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPrimaryColor(event.target.value));
+    const { name, value } = event.target;
+    if (name === 'primaryColor') {
+      dispatch(setPrimaryColor(value));
+    } else {
+      dispatch(setSecondaryColor(value));
+    }
   };
 
-  // Handle font change
   const handleFontChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setFontFamily(event.target.value));
   };
 
-  // Handle layout change
+  const handleFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setFontSize(event.target.value));
+  };
+
   const handleLayoutChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(setLayout(event.target.value));
   };
 
-  // Handle image change
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -38,7 +44,11 @@ const CustomizationPanel: React.FC = () => {
     <Panel>
       <Label>
         Primary Color:
-        <Input type="color" value={primaryColor} onChange={handleColorChange} />
+        <Input type="color" name="primaryColor" value={primaryColor} onChange={handleColorChange} />
+      </Label>
+      <Label>
+        Secondary Color:
+        <Input type="color" name="secondaryColor" value={secondaryColor} onChange={handleColorChange} />
       </Label>
       <Label>
         Font Family:
@@ -48,6 +58,10 @@ const CustomizationPanel: React.FC = () => {
           <option value="Helvetica">Helvetica</option>
           <option value="Times New Roman">Times New Roman</option>
         </Select>
+      </Label>
+      <Label>
+        Font Size:
+        <Input type="number" value={fontSize.replace('px', '')} onChange={handleFontSizeChange} /> px
       </Label>
       <Label>
         Layout:

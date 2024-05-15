@@ -1,4 +1,4 @@
-// pages/index.tsx
+// src/pages/index.tsx
 import styled from 'styled-components';
 
 const HomePage = () => {
