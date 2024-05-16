@@ -11,6 +11,8 @@ const useTheme = (): DefaultTheme => {
       background: '#ffffff',
       text: '#000000',
       primary: primaryColor,
+      border: '#e0e0e0', // Added border color
+      primaryDark: '#0056b3', // Added primary dark color
     },
     fontFamily,
   };
@@ -19,3 +21,4 @@ const useTheme = (): DefaultTheme => {
 };
 
 export default useTheme;
+

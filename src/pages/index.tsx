@@ -1,34 +1,23 @@
-// src/pages/index.tsx
+//src/pages/index.tsx
+import React from 'react';
 import styled from 'styled-components';
+import HeroSection from '../components/HeroSection';
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   return (
     <Container>
-      <Title>Welcome to My Web Platform</Title>
-      <Description>
-        This platform offers ready-made customizable websites across various categories.
-      </Description>
+      <HeroSection />
+      {/* Additional sections can be added here */}
     </Container>
   );
 };
 
+// Styled components
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-`;
-
-const Title = styled.h1`
-  font-size: 4rem;
-  color: ${({ theme }) => theme.colors.primary};
-`;
-
-const Description = styled.p`
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme.colors.text};
+  width: 100%;
 `;
 
 export default HomePage;

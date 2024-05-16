@@ -7,6 +7,8 @@ declare module 'styled-components' {
       background: string;
       text: string;
       primary: string;
+      border: string; 
+      primaryDark: string;
     };
     fontFamily: string;
   }
