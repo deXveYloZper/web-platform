@@ -1,4 +1,3 @@
-// src/components/HeroSection.tsx
 import styled from 'styled-components';
 
 const HeroSection: React.FC = () => {
@@ -20,6 +19,10 @@ const HeroContainer = styled.div`
   width: 100%;
   height: 100vh;
   background: url('/path-to-your-image.jpg') no-repeat center center/cover;
+
+  @media (max-width: 768px) {
+    background: url('/path-to-your-image-mobile.jpg') no-repeat center center/cover;
+  }
 `;
 
 const Overlay = styled.div`
@@ -48,11 +51,19 @@ const Headline = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 
 const Subheadline = styled.h2`
   font-size: 1.5rem;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const CTAButton = styled.button`

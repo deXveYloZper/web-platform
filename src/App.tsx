@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/index';
-import CategoryPage from './pages/Category';
+import CategoryPage from './pages/CategoryPage';
 import TemplateDetailPage from './pages/TemplateDetail';
 import CustomizationPanel from './components/CustomizationPanel';
 import Login from './components/Login';
