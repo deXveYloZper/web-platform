@@ -1,23 +1,21 @@
-// src/redux/themeSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// Define the initial state using that type
 interface ThemeState {
   primaryColor: string;
   secondaryColor: string;
   fontFamily: string;
   fontSize: string;
-  layout: string; // Add layout property
-  image: string; // Add image property
+  layout: string;
+  image: string | null;
 }
 
 const initialState: ThemeState = {
-  primaryColor: '#0070f3',
-  secondaryColor: '#ff4081',
+  primaryColor: '#007bff',
+  secondaryColor: '#6c757d',
   fontFamily: 'Arial',
   fontSize: '16px',
-  layout: 'layout1', // Default layout
-  image: '', // Default image
+  layout: 'layout1',
+  image: null,
 };
 
 const themeSlice = createSlice({
@@ -27,24 +25,49 @@ const themeSlice = createSlice({
     setPrimaryColor(state, action: PayloadAction<string>) {
       state.primaryColor = action.payload;
     },
-    setSecondaryColor(state, action: PayloadAction<string>) { // New action for secondary color
+    setSecondaryColor(state, action: PayloadAction<string>) {
       state.secondaryColor = action.payload;
     },
     setFontFamily(state, action: PayloadAction<string>) {
       state.fontFamily = action.payload;
     },
-    setFontSize(state, action: PayloadAction<string>) { // New action for font size
+    setFontSize(state, action: PayloadAction<string>) {
       state.fontSize = action.payload;
     },
     setLayout(state, action: PayloadAction<string>) {
       state.layout = action.payload;
     },
-    setImage(state, action: PayloadAction<string>) {
+    setImage(state, action: PayloadAction<string | null>) {
       state.image = action.payload;
+    },
+    saveCustomizations(state, action: PayloadAction<ThemeState>) {
+      state.primaryColor = action.payload.primaryColor;
+      state.secondaryColor = action.payload.secondaryColor;
+      state.fontFamily = action.payload.fontFamily;
+      state.fontSize = action.payload.fontSize;
+      state.layout = action.payload.layout;
+      state.image = action.payload.image;
+    },
+    resetCustomizations(state) {
+      state.primaryColor = initialState.primaryColor;
+      state.secondaryColor = initialState.secondaryColor;
+      state.fontFamily = initialState.fontFamily;
+      state.fontSize = initialState.fontSize;
+      state.layout = initialState.layout;
+      state.image = initialState.image;
     },
   },
 });
 
-export const { setPrimaryColor, setSecondaryColor, setFontFamily, setFontSize, setLayout, setImage } = themeSlice.actions;
+export const {
+  setPrimaryColor,
+  setSecondaryColor,
+  setFontFamily,
+  setFontSize,
+  setLayout,
+  setImage,
+  saveCustomizations,
+  resetCustomizations,
+} = themeSlice.actions;
 
 export default themeSlice.reducer;
