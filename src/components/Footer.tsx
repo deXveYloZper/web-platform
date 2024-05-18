@@ -30,6 +30,8 @@ const Footer: React.FC = () => {
 };
 
 // Styled components
+
+// Container for the entire footer
 const FooterContainer = styled.footer`
   width: 100%;
   padding: 2rem;
@@ -40,12 +42,14 @@ const FooterContainer = styled.footer`
   border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
+// Container for the quick links section
 const QuickLinks = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
 `;
 
+// Styles for each footer link
 const FooterLink = styled(Link)`
   margin: 0 1rem;
   text-decoration: none;
@@ -55,15 +59,18 @@ const FooterLink = styled(Link)`
   }
 `;
 
+// Container for the contact information section
 const ContactInfo = styled.div`
   text-align: center;
 `;
 
+// Styles for the address text
 const Address = styled.p`
   margin: 0.5rem 0;
   color: ${({ theme }) => theme.colors.text};
 `;
 
+// Styles for the email link
 const Email = styled.a`
   display: block;
   margin: 0.5rem 0;
@@ -74,12 +81,14 @@ const Email = styled.a`
   }
 `;
 
+// Container for social media icons
 const SocialMedia = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 1rem;
 `;
 
+// Styles for each social media icon link
 const SocialIcon = styled.a`
   margin: 0 0.5rem;
   color: ${({ theme }) => theme.colors.text};

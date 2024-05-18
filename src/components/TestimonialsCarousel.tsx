@@ -2,25 +2,29 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import TestimonialCard from './TestimonialCard';
 
+// Define the structure of a testimonial
 interface Testimonial {
   id: string;
-  image?: string;
-  name: string;
-  rating: number;
-  text: string;
+  image?: string; // Optional image URL for the user's profile picture
+  name: string;   // User's name
+  rating: number; // User's rating out of 5
+  text: string;   // Testimonial text
 }
 
+// Define the props for the TestimonialsCarousel component
 interface TestimonialsCarouselProps {
-  testimonials: Testimonial[];
+  testimonials: Testimonial[]; // Array of testimonial objects
 }
 
+// TestimonialsCarousel component to display user testimonials in a carousel format
 const TestimonialsCarousel: React.FC<TestimonialsCarouselProps> = ({ testimonials }) => {
+  // Slider settings for the carousel
   const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+    dots: true,          // Display dots for navigation
+    infinite: true,      // Infinite loop scrolling
+    speed: 500,          // Transition speed in milliseconds
+    slidesToShow: 1,     // Number of slides to show at a time
+    slidesToScroll: 1,   // Number of slides to scroll at a time
   };
 
   return (
@@ -41,12 +45,15 @@ const TestimonialsCarousel: React.FC<TestimonialsCarouselProps> = ({ testimonial
 };
 
 // Styled components
+
+// Container for the carousel
 const CarouselContainer = styled.div`
   width: 100%;
   padding: 2rem 0;
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
+// Styling for the slider
 const StyledSlider = styled(Slider)`
   .slick-slide {
     display: flex;

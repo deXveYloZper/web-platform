@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { getTemplateById } from '../services/api';
 import CustomizationPanel from '../components/CustomizationPanel'; // Ensure this import matches your project structure
 
+// Define the structure of a template
 interface Template {
   id: string;
   image: string;
@@ -12,11 +13,13 @@ interface Template {
   features: string[];
 }
 
+// TemplateDetailPage component for displaying detailed information about a template
 const TemplateDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const [template, setTemplate] = useState<Template | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { id } = useParams<{ id: string }>(); // Get template ID from URL parameters
+  const [template, setTemplate] = useState<Template | null>(null); // State for storing template data
+  const [loading, setLoading] = useState(true); // Loading state
 
+  // Fetch template data when component mounts or when ID changes
   useEffect(() => {
     const fetchTemplate = async () => {
       if (!id) return; // Ensure id is defined
@@ -33,14 +36,17 @@ const TemplateDetailPage: React.FC = () => {
     fetchTemplate();
   }, [id]);
 
+  // Display loading message while data is being fetched
   if (loading) {
     return <Loading>Loading...</Loading>;
   }
 
+  // Display error message if template is not found
   if (!template) {
     return <ErrorMessage>Template not found.</ErrorMessage>;
   }
 
+  // Display template details and customization panel
   return (
     <Container>
       <TemplatePreview>
@@ -63,6 +69,7 @@ const TemplateDetailPage: React.FC = () => {
 };
 
 // Styled components
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

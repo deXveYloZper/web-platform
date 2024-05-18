@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import TemplateGrid from '../components/TemplateGrid';
 import { getTemplatesByCategory } from '../services/api';
 
+// Define the structure of a template
 interface Template {
   id: string;
   image: string;
@@ -11,14 +12,16 @@ interface Template {
   description: string;
 }
 
+// CategoryPage component for displaying templates by category
 const CategoryPage: React.FC = () => {
-  const { category } = useParams<{ category: string }>();
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('');
-  const [sort, setSort] = useState<string>('relevance');
-  const [search, setSearch] = useState<string>('');
+  const { category } = useParams<{ category: string }>(); // Get category from URL parameters
+  const [templates, setTemplates] = useState<Template[]>([]); // State for storing templates
+  const [loading, setLoading] = useState(true); // Loading state
+  const [filter, setFilter] = useState<string>(''); // Filter state
+  const [sort, setSort] = useState<string>('relevance'); // Sort state
+  const [search, setSearch] = useState<string>(''); // Search state
 
+  // Fetch templates based on category, filter, sort, and search criteria
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
@@ -34,14 +37,17 @@ const CategoryPage: React.FC = () => {
     fetchTemplates();
   }, [category, filter, sort, search]);
 
+  // Handle filter change
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilter(event.target.value);
   };
 
+  // Handle sort change
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(event.target.value);
   };
 
+  // Handle search input change
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
@@ -90,6 +96,7 @@ const CategoryPage: React.FC = () => {
 };
 
 // Styled components
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

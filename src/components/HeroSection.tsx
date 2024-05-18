@@ -14,6 +14,8 @@ const HeroSection: React.FC = () => {
 };
 
 // Styled components
+
+// Container for the hero section with a full-screen background image
 const HeroContainer = styled.div`
   position: relative;
   width: 100%;
@@ -25,15 +27,17 @@ const HeroContainer = styled.div`
   }
 `;
 
+// Overlay to darken the background image for better text readability
 const Overlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); // Slight overlay for text readability
+  background: rgba(0, 0, 0, 0.5);
 `;
 
+// Container for the content inside the hero section
 const Content = styled.div`
   position: relative;
   z-index: 1;
@@ -47,6 +51,7 @@ const Content = styled.div`
   padding: 0 20px;
 `;
 
+// Styles for the main headline text
 const Headline = styled.h1`
   font-size: 3rem;
   font-weight: bold;
@@ -57,6 +62,7 @@ const Headline = styled.h1`
   }
 `;
 
+// Styles for the subheadline text
 const Subheadline = styled.h2`
   font-size: 1.5rem;
   margin-bottom: 2rem;
@@ -66,6 +72,7 @@ const Subheadline = styled.h2`
   }
 `;
 
+// Styles for the call-to-action button
 const CTAButton = styled.button`
   padding: 10px 20px;
   font-size: 1rem;

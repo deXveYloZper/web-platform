@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/rootReducer';
@@ -8,6 +8,7 @@ import { setUser } from '../redux/authSlice';
 import styled from 'styled-components';
 import { getSavedTemplates, deleteTemplate } from '../services/api';
 
+// Define the Template interface to type-check template data
 interface Template {
   id: string;
   image: string;
@@ -16,19 +17,21 @@ interface Template {
 }
 
 const Dashboard: React.FC = () => {
-  const [templates, setTemplates] = useState<Template[]>([]);
+  const [templates, setTemplates] = useState<Template[]>([]); // State to store user templates
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user); // Get current user from Redux store
   const dispatch = useDispatch();
 
+  // Redirect to login if user is not logged in, otherwise fetch saved templates
   useEffect(() => {
     if (!user) {
-      navigate('/login'); // Redirect to login if not logged in
+      navigate('/login');
     } else {
       fetchSavedTemplates();
     }
   }, [user, navigate]);
 
+  // Fetch saved templates for the logged-in user
   const fetchSavedTemplates = async () => {
     try {
       if (user) {
@@ -40,6 +43,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Handle deletion of a template
   const handleDelete = async (id: string) => {
     try {
       await deleteTemplate(id);
@@ -49,6 +53,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  // Handle user logout
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
@@ -100,7 +105,7 @@ const Dashboard: React.FC = () => {
   );
 };
 
-// Styled components
+// Styled components for the layout and design of the dashboard
 const Container = styled.div`
   display: flex;
   height: 100vh;

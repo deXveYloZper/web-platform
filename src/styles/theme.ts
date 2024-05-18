@@ -13,6 +13,7 @@ const useTheme = (): DefaultTheme => {
       primary: primaryColor,
       border: '#e0e0e0', // Added border color
       primaryDark: '#0056b3', // Added primary dark color
+      primaryLight: '#80bfff',
     },
     fontFamily,
   };
