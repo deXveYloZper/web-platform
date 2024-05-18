@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import Calendar from 'react-calendar';
+import Calendar, { CalendarProps } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import { RootState } from '../redux/rootReducer';
@@ -13,11 +13,19 @@ interface Template {
 }
 
 const PurchasePage: React.FC = () => {
-  const selectedTemplate = useSelector((state: RootState) => state.selectedTemplate.template) as Template | null;
+  // Fetch the selected template from Redux store with null check
+  const selectedTemplate = useSelector(
+    (state: RootState) => state.selectedTemplate.template
+  ) as Template | null;
   const [date, setDate] = useState<Date | null>(null);
 
-  const handleDateChange = (value: Date | Date[]) => {
-    setDate(Array.isArray(value) ? value[0] : value);
+  // Handle Date Change
+  const handleDateChange: CalendarProps['onChange'] = (value) => {
+    if (Array.isArray(value)) {
+      setDate(value[0]);
+    } else {
+      setDate(value);
+    }
   };
 
   const handlePayment = (event: React.FormEvent) => {
@@ -25,6 +33,7 @@ const PurchasePage: React.FC = () => {
     // Handle payment logic here
   };
 
+  // Check if a template is selected
   if (!selectedTemplate) {
     return <ErrorMessage>No template selected</ErrorMessage>;
   }
@@ -52,7 +61,7 @@ const PurchasePage: React.FC = () => {
       </PaymentSection>
       <ConsultationSection>
         <h2>Schedule a Consultation</h2>
-        <Calendar onChange={handleDateChange} value={date} />
+        <Calendar onChange={handleDateChange} value={date ?? undefined} /> 
       </ConsultationSection>
       <ConfirmationMessage>
         <h2>Thank You!</h2>
