@@ -9,6 +9,7 @@ import Dashboard from './components/Dashboard';
 import AdminRoute from './components/AdminRoute';
 import TemplateUpload from './components/TemplateUpload';
 import TemplateManagement from './components/TemplateManagement';
+import PurchasePage from './pages/PurchasePage';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/upload" element={<AdminRoute element={<TemplateUpload />} />} />
         <Route path="/admin/manage" element={<AdminRoute element={<TemplateManagement />} />} />
+        <Route path="/purchase" element={<PurchasePage />} />
       </Routes>
       <CustomizationPanel />
     </Router>

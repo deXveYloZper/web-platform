@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { getTemplateById } from '../services/api';
-import CustomizationPanel from '../components/CustomizationPanel'; // Ensure this import matches your project structure
+import CustomizationPanel from '../components/CustomizationPanel';
+import { useNavigate } from 'react-router-dom';
 
 // Define the structure of a template
 interface Template {
@@ -18,6 +19,8 @@ const TemplateDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get template ID from URL parameters
   const [template, setTemplate] = useState<Template | null>(null); // State for storing template data
   const [loading, setLoading] = useState(true); // Loading state
+
+  const navigate = useNavigate();
 
   // Fetch template data when component mounts or when ID changes
   useEffect(() => {
@@ -62,7 +65,7 @@ const TemplateDetailPage: React.FC = () => {
           ))}
         </FeatureList>
         <CustomizationPanel />
-        <CTAButton>Purchase and Customize</CTAButton>
+        <CTAButton onClick={() => navigate('/purchase')}>Purchase and Customize</CTAButton>
       </TemplateDetails>
     </Container>
   );

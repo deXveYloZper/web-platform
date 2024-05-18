@@ -1,9 +1,14 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Calendar, { CalendarProps } from 'react-calendar';
+import { Elements } from '@stripe/react-stripe-js';
+import stripePromise from '../config/stripe';
+
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import { RootState } from '../redux/rootReducer';
+import PaymentForm from '../components/PaymentForm';
+import { setConsultationDate } from '../redux/consultationSlice';
 
 interface Template {
   id: string;
@@ -13,27 +18,28 @@ interface Template {
 }
 
 const PurchasePage: React.FC = () => {
-  // Fetch the selected template from Redux store with null check
+  const dispatch = useDispatch();
   const selectedTemplate = useSelector(
     (state: RootState) => state.selectedTemplate.template
   ) as Template | null;
   const [date, setDate] = useState<Date | null>(null);
 
-  // Handle Date Change
   const handleDateChange: CalendarProps['onChange'] = (value) => {
     if (Array.isArray(value)) {
-      setDate(value[0]);
-    } else {
+      const selectedDate = value[0];
+      if (selectedDate instanceof Date) {
+        setDate(selectedDate);
+        dispatch(setConsultationDate(selectedDate));
+      }
+    } else if (value instanceof Date) {
       setDate(value);
+      dispatch(setConsultationDate(value));
+    } else {
+      setDate(null); // No need to dispatch null
     }
   };
 
-  const handlePayment = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Handle payment logic here
-  };
 
-  // Check if a template is selected
   if (!selectedTemplate) {
     return <ErrorMessage>No template selected</ErrorMessage>;
   }
@@ -50,18 +56,15 @@ const PurchasePage: React.FC = () => {
           </TemplateInfo>
         </TemplateDetails>
       </SummarySection>
-      <PaymentSection onSubmit={handlePayment}>
-        <h2>Payment Details</h2>
-        <Input type="text" placeholder="Card Number" required />
-        <Input type="text" placeholder="Card Holder Name" required />
-        <Input type="text" placeholder="Expiry Date (MM/YY)" required />
-        <Input type="text" placeholder="CVV" required />
-        <SecurityBadge>Secure Transaction</SecurityBadge>
-        <Button type="submit">Pay Now</Button>
-      </PaymentSection>
+      <Elements stripe={stripePromise}>
+        <PaymentSection>
+          <h2>Payment Details</h2>
+          <PaymentForm />
+        </PaymentSection>
+      </Elements>
       <ConsultationSection>
         <h2>Schedule a Consultation</h2>
-        <Calendar onChange={handleDateChange} value={date ?? undefined} /> 
+        <Calendar onChange={handleDateChange} value={date ?? undefined} />
       </ConsultationSection>
       <ConfirmationMessage>
         <h2>Thank You!</h2>
@@ -115,7 +118,7 @@ const TemplateDescription = styled.p`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const PaymentSection = styled.form`
+const PaymentSection = styled.div`
   width: 100%;
   max-width: 800px;
   margin-bottom: 2rem;
@@ -123,36 +126,6 @@ const PaymentSection = styled.form`
   padding: 1rem;
   border-radius: 8px;
   background: ${({ theme }) => theme.colors.background};
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 4px;
-`;
-
-const SecurityBadge = styled.div`
-  margin: 1rem 0;
-  padding: 0.5rem;
-  background: #e0ffe0;
-  color: #008000;
-  border: 1px solid #008000;
-  border-radius: 4px;
-  text-align: center;
-`;
-
-const Button = styled.button`
-  padding: 0.75rem 1.5rem;
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryDark};
-  }
 `;
 
 const ConsultationSection = styled.section`
