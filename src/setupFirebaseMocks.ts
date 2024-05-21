@@ -1,26 +1,13 @@
-import { mockAuth } from 'firebase-mock';
-import { mockFirestore } from 'firebase-mock';
+import { MockFirebaseSdk } from 'firebase-mock';
 
-const mockauth = new mockAuth();
-const mockfirestore = new mockFirestore();
+const mockFirebaseSdk = new MockFirebaseSdk();
+const mockAuth = mockFirebaseSdk.auth();
+const mockFirestore = mockFirebaseSdk.firestore();
 
-jest.mock('firebase/app', () => {
-  return {
-    initializeApp: jest.fn(() => ({
-      auth: jest.fn(() => mockauth),
-      firestore: jest.fn(() => mockfirestore),
-    })),
-  };
-});
+jest.mock('firebase/auth', () => ({
+getAuth: jest.fn(() => mockAuth),
+}));
 
-jest.mock('firebase/auth', () => {
-  return {
-    getAuth: jest.fn(() => mockauth),
-  };
-});
-
-jest.mock('firebase/firestore', () => {
-  return {
-    getFirestore: jest.fn(() => mockfirestore),
-  };
-});
+jest.mock('firebase/firestore', () => ({
+    getFirestore: jest.fn(() => mockFirestore),
+}));

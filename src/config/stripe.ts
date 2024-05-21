@@ -1,6 +1,7 @@
 // src/config/stripe.ts
-import { loadStripe } from '@stripe/stripe-js';
+// import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe('your-publishable-key-here');
+// Commenting out the stripePromise
+// const stripePromise = loadStripe('your-publishable-key-here');
 
-export default stripePromise;
+// export default stripePromise;

@@ -1,13 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Calendar, { CalendarProps } from 'react-calendar';
-import { Elements } from '@stripe/react-stripe-js';
-import stripePromise from '../config/stripe';
-
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import { RootState } from '../redux/rootReducer';
-import PaymentForm from '../components/PaymentForm';
 import { setConsultationDate } from '../redux/consultationSlice';
 
 interface Template {
@@ -39,7 +35,6 @@ const PurchasePage: React.FC = () => {
     }
   };
 
-
   if (!selectedTemplate) {
     return <ErrorMessage>No template selected</ErrorMessage>;
   }
@@ -56,12 +51,20 @@ const PurchasePage: React.FC = () => {
           </TemplateInfo>
         </TemplateDetails>
       </SummarySection>
+      {/* Commenting out the Stripe Elements section */}
+      {/*
       <Elements stripe={stripePromise}>
         <PaymentSection>
           <h2>Payment Details</h2>
           <PaymentForm />
         </PaymentSection>
       </Elements>
+      */}
+      {/* Placeholder for Payment Form */}
+      <PaymentSection>
+        <h2>Payment Details</h2>
+        <p>Payment form will be here</p>
+      </PaymentSection>
       <ConsultationSection>
         <h2>Schedule a Consultation</h2>
         <Calendar onChange={handleDateChange} value={date ?? undefined} />

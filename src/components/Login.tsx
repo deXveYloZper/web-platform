@@ -1,58 +1,63 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
-import styled from 'styled-components';
+import { auth } from '../firebaseConfig'; 
+import styled, { ThemeProvider } from 'styled-components'; 
+import defaultTheme from '../styles/theme'; // Import the default theme directly
 
 const Login: React.FC = () => {
-  // State to hold email and password inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Firebase hook to handle sign-in
-  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
-
+  const [signInWithEmailAndPassword, , loading, error] = useSignInWithEmailAndPassword(auth);
   const navigate = useNavigate();
 
-  // Effect to navigate to dashboard if user is logged in
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard'); // Redirect to dashboard if user is logged in
-    }
-  }, [user, navigate]);
-
-  // Handle login form submission
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    signInWithEmailAndPassword(email, password);
+    try {
+      const userCredential = await signInWithEmailAndPassword(email, password);
+      if (userCredential?.user) {
+        navigate('/dashboard'); 
+      }
+    } catch (err) {
+      console.error('Error logging in:', err);
+    }
   };
 
   return (
-    <LoginContainer>
-      <LoginCard>
-        <Title>Login</Title>
-        <Form onSubmit={handleLogin}>
-          <InputGroup>
-            <Label>Email:</Label>
-            <Input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-            />
-          </InputGroup>
-          <InputGroup>
-            <Label>Password:</Label>
-            <Input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-          </InputGroup>
-          <Button type="submit" disabled={loading}>Login</Button>
-        </Form>
-        {error && <ErrorMessage>{error.message}</ErrorMessage>} {/* Display error message if any */}
-      </LoginCard>
-    </LoginContainer>
+    <ThemeProvider theme={defaultTheme}> {/* Use the default theme directly */}
+      <LoginContainer data-testid="login-container">
+        <LoginCard>
+          <Title>Login</Title>
+          <Form onSubmit={handleLogin}>
+            <InputGroup>
+              <Label htmlFor="email-input">Email:</Label>
+              <Input 
+                data-testid="email-input"
+                type="email" 
+                id="email-input"
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label htmlFor="password-input">Password:</Label>
+              <Input 
+                data-testid="password-input"
+                type="password" 
+                id="password-input"
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+              />
+            </InputGroup>
+            <Button type="submit" data-testid="login-button" disabled={loading}>
+              Login
+            </Button>
+          </Form>
+          {error && <ErrorMessage>{error.message}</ErrorMessage>}
+        </LoginCard>
+      </LoginContainer>
+    </ThemeProvider>
   );
 };
 
@@ -142,4 +147,3 @@ const ErrorMessage = styled.p`
   margin-top: 1rem;
   color: red;
 `;
-

@@ -1,25 +1,16 @@
 // src/styles/theme.ts
 import { DefaultTheme } from 'styled-components';
-import { RootState } from '../redux/rootReducer';
-import { useSelector } from 'react-redux';
 
-const useTheme = (): DefaultTheme => {
-  const { primaryColor, fontFamily } = useSelector((state: RootState) => state.theme);
-
-  const theme: DefaultTheme = {
-    colors: {
-      background: '#ffffff',
-      text: '#000000',
-      primary: primaryColor,
-      border: '#e0e0e0', // Added border color
-      primaryDark: '#0056b3', // Added primary dark color
-      primaryLight: '#80bfff',
-    },
-    fontFamily,
-  };
-
-  return theme;
+const defaultTheme: DefaultTheme = {
+  colors: {
+    background: '#ffffff',
+    text: '#000000',
+    primary: '#007bff',
+    border: '#e0e0e0',
+    primaryDark: '#0056b3',
+    primaryLight: '#80bfff',
+  },
+  fontFamily: 'Arial, sans-serif',
 };
 
-export default useTheme;
-
+export default defaultTheme;

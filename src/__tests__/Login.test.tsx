@@ -1,60 +1,106 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
-import Login from '../components/Login';
-import useTheme from '../styles/theme';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
+import Login from '../components/Login';  
 
-// Create mock store
-const mockStore = configureStore([]);
-const initialState = {
-  theme: {
-    primaryColor: '#007bff',
-    fontFamily: 'Arial, sans-serif',
-  },
-};
+const mockStore = configureStore();
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  useNavigate: () => mockNavigate,
+}));
 
-const store = mockStore(initialState);
+const mockSignInWithEmailAndPassword = jest.fn();
 
-const MockedThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const theme = useTheme();
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
-};
+jest.mock('react-firebase-hooks/auth', () => ({
+  useSignInWithEmailAndPassword: () => [
+    mockSignInWithEmailAndPassword,
+    null, // User is initially null (not logged in)
+    false, // Loading state
+    null, // Error is initially null
+  ],
+}));
+
 
 describe('Login', () => {
-  it('renders correctly', () => {
-    render(
-      <Provider store={store}>
-        <MockedThemeProvider>
-          <BrowserRouter>
-            <Login />
-          </BrowserRouter>
-        </MockedThemeProvider>
-      </Provider>
-    );
-    expect(screen.getByText('Login')).toBeInTheDocument();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('allows user to input email and password', () => {
+  it('renders correctly', () => {
+    // Mock theme object (adjust properties as needed)
+    const mockTheme = {
+      colors: {
+        background: '#ffffff',
+        text: '#000000',
+        primary: '#007bff',
+        // ... other colors
+      },
+      fontFamily: 'Arial, sans-serif',
+    };
+
+    // Mock the custom hook
+    jest.mock('../styles/theme', () => () => mockTheme); // Mock the theme hook to return the mockTheme object
+
     render(
-      <Provider store={store}>
-        <MockedThemeProvider>
+      <Provider store={mockStore({})}> 
           <BrowserRouter>
-            <Login />
+            <Login /> 
           </BrowserRouter>
-        </MockedThemeProvider>
+      </Provider>
+    );
+    
+    // Test elements exist
+    expect(screen.getByTestId('login-container')).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByTestId('login-button')).toBeInTheDocument(); 
+  });
+
+  it('allows user to input email and password and submit', async () => { 
+    // Mock theme object (adjust properties as needed)
+    const mockTheme = {
+      colors: {
+        background: '#ffffff',
+        text: '#000000',
+        primary: '#007bff',
+        // ... other colors
+      },
+      fontFamily: 'Arial, sans-serif',
+    };
+
+    // Mock the custom hook
+    jest.mock('../styles/theme', () => () => mockTheme); // Mock the theme hook to return the mockTheme object
+    render(
+      <Provider store={mockStore({})}>
+          <BrowserRouter>
+            <Login /> 
+          </BrowserRouter>
       </Provider>
     );
 
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
+    const emailInput = screen.getByTestId('email-input');
+    const passwordInput = screen.getByTestId('password-input');
+    const loginButton = screen.getByTestId('login-button');
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'password' } });
 
     expect(emailInput).toHaveValue('test@example.com');
     expect(passwordInput).toHaveValue('password');
+
+    // Mock a successful login
+    mockSignInWithEmailAndPassword.mockResolvedValueOnce({ user: {} });
+
+    fireEvent.click(loginButton);
+
+    // Ensure the sign-in function was called with the correct credentials
+    expect(mockSignInWithEmailAndPassword).toHaveBeenCalledWith('test@example.com', 'password');
+
+    // If successful login should redirect (need to adjust the route)
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboard'); 
   });
+  // Add tests for error handling and loading state 
 });
+
