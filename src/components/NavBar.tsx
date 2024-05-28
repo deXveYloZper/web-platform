@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useState} from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const NavBar: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Toggle dropdown menu visibility
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+  const handleMouseEnter = () => {
+    setDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setDropdownOpen(false);
   };
 
   return (
@@ -17,10 +20,10 @@ const NavBar: React.FC = () => {
         <NavItem>
           <NavLink to="/">Home</NavLink>
         </NavItem>
-        <NavItem onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
+        <NavItem onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           <NavLink to="#">Categories</NavLink>
           {dropdownOpen && (
-            <Dropdown>
+            <Dropdown onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
               <DropdownItem to="/category/e-commerce">E-commerce</DropdownItem>
               <DropdownItem to="/category/business">Business</DropdownItem>
               <DropdownItem to="/category/blogs">Blogs</DropdownItem>
@@ -40,6 +43,12 @@ const NavBar: React.FC = () => {
         <NavItem>
           <NavLink to="/contact">Contact</NavLink>
         </NavItem>
+        <NavItem>
+          <NavLink to="/login">Login</NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink to="/Register">Register</NavLink>
+        </NavItem>
       </NavLinks>
       <SearchBar>
         <SearchInput type="text" placeholder="Search..." />
@@ -53,7 +62,6 @@ export default NavBar;
 
 // Styled components
 
-// Container for the navigation bar
 const NavContainer = styled.nav`
   display: flex;
   justify-content: space-between;
@@ -61,16 +69,16 @@ const NavContainer = styled.nav`
   padding: 1rem 2rem;
   background-color: ${({ theme }) => theme.colors.background};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  width: 100%;
+  box-sizing: border-box;
 `;
 
-// Logo styling
 const Logo = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   color: ${({ theme }) => theme.colors.primary};
 `;
 
-// Container for the navigation links
 const NavLinks = styled.ul`
   display: flex;
   list-style: none;
@@ -78,13 +86,11 @@ const NavLinks = styled.ul`
   padding: 0;
 `;
 
-// Individual navigation item
 const NavItem = styled.li`
   position: relative;
   margin: 0 1rem;
 `;
 
-// Navigation link styling
 const NavLink = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.colors.text};
@@ -93,7 +99,6 @@ const NavLink = styled(Link)`
   }
 `;
 
-// Dropdown menu styling
 const Dropdown = styled.div`
   position: absolute;
   top: 100%;
@@ -103,7 +108,6 @@ const Dropdown = styled.div`
   z-index: 1;
 `;
 
-// Dropdown item styling
 const DropdownItem = styled(Link)`
   display: block;
   padding: 0.5rem 1rem;
@@ -115,20 +119,17 @@ const DropdownItem = styled(Link)`
   }
 `;
 
-// Container for the search bar
 const SearchBar = styled.div`
   display: flex;
   align-items: center;
 `;
 
-// Search input field styling
 const SearchInput = styled.input`
   padding: 0.5rem;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 4px;
 `;
 
-// Search button styling
 const SearchButton = styled.button`
   padding: 0.5rem 1rem;
   margin-left: 0.5rem;
@@ -141,4 +142,3 @@ const SearchButton = styled.button`
     background-color: ${({ theme }) => theme.colors.primaryDark};
   }
 `;
-

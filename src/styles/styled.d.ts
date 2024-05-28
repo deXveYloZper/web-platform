@@ -7,9 +7,15 @@ declare module 'styled-components' {
       background: string;
       text: string;
       primary: string;
+      secondary: string;
       border: string; 
       primaryDark: string;
       primaryLight: string;
+      secondaryLight: string;
+      backgroundDark: string;
+      backgroundLight: string;
+      accent: string;
+      textLight: string;
     };
     fontFamily: string;
   }

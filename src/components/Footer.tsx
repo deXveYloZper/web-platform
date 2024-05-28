@@ -1,18 +1,13 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa'; // Added LinkedIn icon
 
 const Footer: React.FC = () => {
   return (
     <FooterContainer>
-      <QuickLinks>
-        <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
-        <FooterLink to="/terms-of-service">Terms of Service</FooterLink>
-        <FooterLink to="/faqs">FAQs</FooterLink>
-      </QuickLinks>
-      <ContactInfo>
-        <Address>123 Web Platform St, Online City, Internet</Address>
-        <Email href="mailto:contact@webplatform.com">contact@webplatform.com</Email>
+       <Container>
+      <TopSection>
+        <Logo>MyWebPlatform</Logo>
         <SocialMedia>
           <SocialIcon href="https://facebook.com" target="_blank" aria-label="Facebook">
             <FaFacebook />
@@ -23,79 +18,109 @@ const Footer: React.FC = () => {
           <SocialIcon href="https://instagram.com" target="_blank" aria-label="Instagram">
             <FaInstagram />
           </SocialIcon>
+          <SocialIcon href="https://linkedin.com" target="_blank" aria-label="LinkedIn">
+            <FaLinkedin />
+          </SocialIcon>
         </SocialMedia>
-      </ContactInfo>
+      </TopSection>
+
+      <BottomSection>
+        <QuickLinks>
+          <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
+          <FooterLink to="/terms-of-service">Terms of Service</FooterLink>
+          <FooterLink to="/faqs">FAQs</FooterLink>
+          <FooterLink to="/contact">Contact Us</FooterLink>
+        </QuickLinks>
+        <Copyright>&copy; {new Date().getFullYear()} MyWebPlatform. All rights reserved.</Copyright>
+      </BottomSection>
+      </Container>
     </FooterContainer>
   );
 };
 
-// Styled components
-
-// Container for the entire footer
+// Styled Components
 const FooterContainer = styled.footer`
   width: 100%;
-  padding: 2rem;
-  background-color: ${({ theme }) => theme.colors.background};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  padding: 3rem 2rem;
+  background-color: ${({ theme }) => theme.colors.backgroundDark};
+  color: #fff;
+  box-sizing: border-box; // Ensure padding and border are included in width
+  overflow-x: hidden;     // Prevent horizontal overflow
 `;
 
-// Container for the quick links section
+const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;  // Center the container within the footer
+`;
+
+const TopSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const Logo = styled.div`
+  font-size: 1.8rem;
+  font-weight: bold;
+`;
+
+const SocialMedia = styled.div`
+  display: flex;
+`;
+
+const SocialIcon = styled.a`
+  margin: 0 0.8rem;
+  color: #fff; // White icons
+  font-size: 1.8rem;
+  transition: color 0.3s;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary}; 
+  }
+`;
+
+const BottomSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #555; // Subtle separator line
+  padding-top: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
 const QuickLinks = styled.div`
   display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+  width: auto;
 `;
 
-// Styles for each footer link
 const FooterLink = styled(Link)`
   margin: 0 1rem;
   text-decoration: none;
-  color: ${({ theme }) => theme.colors.text};
+  color: #fff;
+  transition: color 0.3s;
+
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
-// Container for the contact information section
-const ContactInfo = styled.div`
+const Copyright = styled.p`
+  font-size: 0.9rem;
   text-align: center;
-`;
 
-// Styles for the address text
-const Address = styled.p`
-  margin: 0.5rem 0;
-  color: ${({ theme }) => theme.colors.text};
-`;
-
-// Styles for the email link
-const Email = styled.a`
-  display: block;
-  margin: 0.5rem 0;
-  color: ${({ theme }) => theme.colors.text};
-  text-decoration: none;
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+  @media (max-width: 768px) {
+    margin-top: 1rem;
   }
 `;
 
-// Container for social media icons
-const SocialMedia = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-`;
-
-// Styles for each social media icon link
-const SocialIcon = styled.a`
-  margin: 0 0.5rem;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 1.5rem;
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-  }
-`;
 
 export default Footer;
