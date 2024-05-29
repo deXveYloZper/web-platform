@@ -1,53 +1,62 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig'; 
-import styled, { ThemeProvider } from 'styled-components'; 
-import defaultTheme from '../styles/theme'; // Import the default theme directly
+import { auth } from '../firebaseConfig';
+import { setUser, setLoading, setError } from '../redux/authSlice';
+import styled, { ThemeProvider } from 'styled-components';
+import defaultTheme from '../styles/theme';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [signInWithEmailAndPassword, , loading, error] = useSignInWithEmailAndPassword(auth);
-  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    dispatch(setLoading(true));
     try {
       const userCredential = await signInWithEmailAndPassword(email, password);
       if (userCredential?.user) {
-        navigate('/dashboard'); 
+        dispatch(setUser(userCredential.user));
+        navigate('/dashboard');
       }
     } catch (err) {
-      console.error('Error logging in:', err);
+      const errorMessage = (err as Error).message;
+      console.error('Error logging in:', errorMessage);
+      dispatch(setError(errorMessage));
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}> {/* Use the default theme directly */}
+    <ThemeProvider theme={defaultTheme}>
       <LoginContainer data-testid="login-container">
         <LoginCard>
           <Title>Login</Title>
           <Form onSubmit={handleLogin}>
             <InputGroup>
               <Label htmlFor="email-input">Email:</Label>
-              <Input 
+              <Input
                 data-testid="email-input"
-                type="email" 
+                type="email"
                 id="email-input"
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </InputGroup>
             <InputGroup>
               <Label htmlFor="password-input">Password:</Label>
-              <Input 
+              <Input
                 data-testid="password-input"
-                type="password" 
+                type="password"
                 id="password-input"
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </InputGroup>
             <Button type="submit" data-testid="login-button" disabled={loading}>
@@ -65,7 +74,6 @@ export default Login;
 
 // Styled components
 
-// Container for the login page
 const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -74,7 +82,6 @@ const LoginContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-// Card to hold the login form
 const LoginCard = styled.div`
   background-color: #fff;
   padding: 2rem;
@@ -85,32 +92,27 @@ const LoginCard = styled.div`
   text-align: center;
 `;
 
-// Title of the login form
 const Title = styled.h2`
   margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.text};
 `;
 
-// Form element
 const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
 
-// Grouping for each input field
 const InputGroup = styled.div`
   margin-bottom: 1rem;
   text-align: left;
 `;
 
-// Label for input fields
 const Label = styled.label`
   margin-bottom: 0.5rem;
   display: block;
   color: ${({ theme }) => theme.colors.text};
 `;
 
-// Input fields
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
@@ -121,7 +123,6 @@ const Input = styled.input`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-// Button for form submission
 const Button = styled.button`
   padding: 0.75rem;
   font-size: 1rem;
@@ -142,7 +143,6 @@ const Button = styled.button`
   }
 `;
 
-// Error message display
 const ErrorMessage = styled.p`
   margin-top: 1rem;
   color: red;

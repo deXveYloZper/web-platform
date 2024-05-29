@@ -3,7 +3,7 @@ import { getAuth, User } from 'firebase/auth';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import firebaseMockConfig from './firebaseMockConfig';
 
-const firebaseConfig = process.env.NODE_ENV === 'development' ? firebaseMockConfig : {
+const firebaseConfig = import.meta.env.MODE === 'development' ? firebaseMockConfig : {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
@@ -13,6 +13,7 @@ const firebaseConfig = process.env.NODE_ENV === 'development' ? firebaseMockConf
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
+console.log('Using Firebase config:', firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

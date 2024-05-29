@@ -10,4 +10,8 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
+  module.exports = {
+    setupFilesAfterEnv: ['./src/setupFirebaseMocks.ts'],
+  };
+  
 };

@@ -1,58 +1,66 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
+import { useDispatch } from 'react-redux';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
-import styled from 'styled-components';
+import { setUser, setLoading, setError } from '../redux/authSlice';
+import styled, { ThemeProvider } from 'styled-components';
+import defaultTheme from '../styles/theme';
 
 const Register: React.FC = () => {
-  // State to hold email and password inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  // Firebase hook to handle user registration
-  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Effect to navigate to dashboard if user is registered
-  useEffect(() => {
-    if (user) {
-      navigate('/dashboard'); // Redirect to dashboard if user is registered
-    }
-  }, [user, navigate]);
+  const [createUserWithEmailAndPassword, , loading, error] = useCreateUserWithEmailAndPassword(auth);
 
-  // Handle registration form submission
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(email, password);
+    dispatch(setLoading(true));
+    try {
+      const userCredential = await createUserWithEmailAndPassword(email, password);
+      if (userCredential?.user) {
+        dispatch(setUser(userCredential.user));
+        navigate('/dashboard');
+      }
+    } catch (err) {
+      const errorMessage = (err as Error).message;
+      console.error('Error registering:', errorMessage);
+      dispatch(setError(errorMessage));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   return (
-    <RegisterContainer>
-      <RegisterCard>
-        <Title>Register</Title>
-        <Form onSubmit={handleRegister}>
-          <InputGroup>
-            <Label>Email:</Label>
-            <Input 
-              type="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-            />
-          </InputGroup>
-          <InputGroup>
-            <Label>Password:</Label>
-            <Input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-          </InputGroup>
-          <Button type="submit" disabled={loading}>Register</Button>
-        </Form>
-        {error && <ErrorMessage>{error.message}</ErrorMessage>} {/* Display error message if any */}
-      </RegisterCard>
-    </RegisterContainer>
+    <ThemeProvider theme={defaultTheme}>
+      <RegisterContainer>
+        <RegisterCard>
+          <Title>Register</Title>
+          <Form onSubmit={handleRegister}>
+            <InputGroup>
+              <Label>Email:</Label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </InputGroup>
+            <InputGroup>
+              <Label>Password:</Label>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </InputGroup>
+            <Button type="submit" disabled={loading}>Register</Button>
+          </Form>
+          {error && <ErrorMessage>{error.message}</ErrorMessage>}
+        </RegisterCard>
+      </RegisterContainer>
+    </ThemeProvider>
   );
 };
 
@@ -60,7 +68,6 @@ export default Register;
 
 // Styled components
 
-// Container for the registration page
 const RegisterContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -69,7 +76,6 @@ const RegisterContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-// Card to hold the registration form
 const RegisterCard = styled.div`
   background-color: #fff;
   padding: 2rem;
@@ -80,32 +86,27 @@ const RegisterCard = styled.div`
   text-align: center;
 `;
 
-// Title of the registration form
 const Title = styled.h2`
   margin-bottom: 1rem;
   color: ${({ theme }) => theme.colors.text};
 `;
 
-// Form element
 const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
 
-// Grouping for each input field
 const InputGroup = styled.div`
   margin-bottom: 1rem;
   text-align: left;
 `;
 
-// Label for input fields
 const Label = styled.label`
   margin-bottom: 0.5rem;
   display: block;
   color: ${({ theme }) => theme.colors.text};
 `;
 
-// Input fields
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
@@ -116,7 +117,6 @@ const Input = styled.input`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-// Button for form submission
 const Button = styled.button`
   padding: 0.75rem;
   font-size: 1rem;
@@ -137,7 +137,6 @@ const Button = styled.button`
   }
 `;
 
-// Error message display
 const ErrorMessage = styled.p`
   margin-top: 1rem;
   color: red;
