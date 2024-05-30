@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/rootReducer';
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import { auth } from '../config/firebaseConfig';
 import { setUser } from '../redux/authSlice'; 
 import styled from 'styled-components';
 import { getSavedTemplates, deleteTemplate } from '../services/api';

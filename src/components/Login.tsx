@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import { auth } from '../config/firebaseConfig';
 import { setUser, setLoading, setError } from '../redux/authSlice';
 import styled, { ThemeProvider } from 'styled-components';
 import defaultTheme from '../styles/theme';

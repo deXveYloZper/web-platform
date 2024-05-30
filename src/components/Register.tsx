@@ -2,7 +2,7 @@ import { useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import { auth } from '../config/firebaseConfig';
 import { setUser, setLoading, setError } from '../redux/authSlice';
 import styled, { ThemeProvider } from 'styled-components';
 import defaultTheme from '../styles/theme';
@@ -14,12 +14,14 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
 
   const [createUserWithEmailAndPassword, , loading, error] = useCreateUserWithEmailAndPassword(auth);
+  console.log('auth object before registration:', auth)
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(setLoading(true));
     try {
       const userCredential = await createUserWithEmailAndPassword(email, password);
+      console.log('auth object before registration:', auth)
       if (userCredential?.user) {
         dispatch(setUser(userCredential.user));
         navigate('/dashboard');

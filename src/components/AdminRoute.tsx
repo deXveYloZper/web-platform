@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, isAdmin } from '../firebaseConfig';
+import { auth, isAdmin } from '../config/firebaseConfig';
 
 const AdminRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
   const [user, loading, error] = useAuthState(auth);
