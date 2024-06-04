@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
 import 'jest-styled-components';
-import './setupFirebaseMocks';
+import './mocks/setupFirebaseMocks';
 
 // Optional: Adjust RTL configurations
 configure({ testIdAttribute: 'data-testid' });
@@ -15,3 +15,5 @@ if (typeof window !== 'undefined') {
     };
   };
 }
+jest.mock('firebase/auth', () => require('./mocks/firebaseAuthMock'));
+jest.mock('firebase/firestore', () => require('./mocks/firebaseFirestoreMock'));
